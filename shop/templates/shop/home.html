@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - E-Commerce</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Welcome to Our E-Commerce Store</h1>
+        <nav>
+            <a href="{% url 'cart' %}">View Cart</a>
+            {% if request.user.is_authenticated %}
+                <span>Welcome, {{ request.user.username }}</span>
+                <a href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'register' %}">Register</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main>
+        <section class="product-list">
+            <ul>
+                {% for product in products %}
+                    <li class="product-item">
+                        <h2>{{ product.name }}</h2>
+                        <p>{{ product.description }}</p>
+                        <p>Price: ${{ product.price }}</p>
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" width="200">
+                        {% else %}
+                            <p>No image available</p>
+                        {% endif %}
+                        <div class="product-actions">
+                            <a href="{% url 'product_detail' product.id %}" class="btn">View Details</a>
+                            <a href="{% url 'add_to_cart' product.id %}" class="btn">Add to Cart</a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 E-Commerce Store. All rights reserved.</p>
+    </footer>
+</body>
+</html>
